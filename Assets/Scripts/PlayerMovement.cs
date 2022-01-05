@@ -7,8 +7,6 @@ public class PlayerMovement : MonoBehaviour
 {
 	[Header("References")]
 	private Rigidbody2D rb;
-    private PlayerInputActions playerControls;
-    private InputAction controllerInput;
 
 	[Header("Movement")]
 	public float moveSpeed;
@@ -50,57 +48,14 @@ public class PlayerMovement : MonoBehaviour
 	[Header("Layers & Tags")]
 	public LayerMask groundLayer;
 
-    private void Awake() {
-        playerControls = new PlayerInputActions();
-    }
-
-    private void OnEnable() {
-        controllerInput = playerControls.Player.Move;
-        controllerInput.Enable();
-
-        playerControls.Player.Jump.started += Jump;
-        playerControls.Player.Jump.performed += OnJump;
-        playerControls.Player.Jump.canceled += OnJumpEnd;
-        playerControls.Player.Jump.Enable();
-    }
-
-    private void OnDisable() {
-        controllerInput.Disable();
-        playerControls.Player.Jump.Disable();
-    }
-
 	private void Start()
 	{
-		/*
-		 - retrieves rigidbody
-		 - if you want the player to have more functionality in future eg: combat, more movement options, etc. 
-		 - I would recommend creating a seperate Player Class and using that to hold all player info such as the rigidbody and make seperate movement, combat, classes for specific functions
-		 - Highly recommed looking into abstacrtion, decoupling and inheritance if you're working on a large project
-		*/
 		rb = GetComponent<Rigidbody2D>();
-
 		gravityScale = rb.gravityScale;
 	}
 
 	private void Update()
 	{
-		#region Inputs
-		moveInput = controllerInput.ReadValue<Vector2>();
-		#endregion
-
-		#region Run
-		if (moveInput.x != 0)
-			lastMoveInput.x = moveInput.x;
-		if (moveInput.y != 0)
-			lastMoveInput.y = moveInput.y;
-
-		if ((lastMoveInput.x > 0 && !isFacingRight) || (lastMoveInput.x < 0 && isFacingRight))
-		{
-			Turn();
-			isFacingRight = !isFacingRight;
-		}
-		#endregion
-
 		#region Ground
 		//checks if set box overlaps with ground
 		if (Physics2D.OverlapBox(groundCheckPoint.position, groundCheckSize, 0, groundLayer) && !isJumping) 
@@ -182,8 +137,41 @@ public class PlayerMovement : MonoBehaviour
 		#endregion
 	}
 
+    public void MoveCallback(InputAction.CallbackContext context) {
+		moveInput = context.ReadValue<Vector2>();
+		
+		if (moveInput.x != 0)
+			lastMoveInput.x = moveInput.x;
+		if (moveInput.y != 0)
+			lastMoveInput.y = moveInput.y;
+
+		if ((lastMoveInput.x > 0 && !isFacingRight) || (lastMoveInput.x < 0 && isFacingRight))
+		{
+			Turn();
+			isFacingRight = !isFacingRight;
+		}
+    }
+
 	#region Jump
-	private void Jump(InputAction.CallbackContext context)
+    public void JumpCallback(InputAction.CallbackContext context) {
+        switch(context.phase) {
+            case InputActionPhase.Started: {
+                Jump();
+                break;
+            }
+            case InputActionPhase.Performed: {
+                OnJump();
+                break;
+            }
+            case InputActionPhase.Canceled: {
+                OnJumpEnd();
+                break;
+            }
+            default: break;
+        }
+    }
+
+	private void Jump()
 	{
         if (lastJumpTime <= 0 && !isJumping && jumpInputReleased)
 		{
@@ -200,13 +188,13 @@ public class PlayerMovement : MonoBehaviour
         }
 	}
 
-	public void OnJump(InputAction.CallbackContext context)
+	private void OnJump()
 	{
 		lastJumpTime = jumpBufferTime;
 		jumpInputReleased = false;
 	}
 
-	public void OnJumpEnd(InputAction.CallbackContext context)
+	private void OnJumpEnd()
 	{
 		if (rb.velocity.y > 0 && isJumping)
 		{
