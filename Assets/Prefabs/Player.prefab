@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -1132783380287622887}
   - component: {fileID: 2413913728365318087}
   - component: {fileID: 4852862159640590309}
+  - component: {fileID: 4271107323277730582}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -128,7 +129,19 @@ MonoBehaviour:
     m_ActionId: 87e12dab-d434-4a16-b1f6-920ff740b82e
     m_ActionName: Player/Jump[/Keyboard/space,/Gamepad/buttonSouth,/Keyboard/upArrow,/Keyboard/w]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4271107323277730582}
+        m_TargetAssemblyTypeName: OneWayPlatform, Assembly-CSharp
+        m_MethodName: DropCallback
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 21476da4-0f0a-41fe-a04a-1820040b945b
     m_ActionName: Player/Drop[/Keyboard/s,/Keyboard/downArrow,/Gamepad/leftStick/down]
   - m_PersistentCalls:
@@ -213,6 +226,19 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 1}
   m_Direction: 0
+--- !u!114 &4271107323277730582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 451178822986620684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 207373b3221005c0ca4bf1d367c48751, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropCoyoteTime: 0.1
 --- !u!1 &451178823518028142
 GameObject:
   m_ObjectHideFlags: 0
