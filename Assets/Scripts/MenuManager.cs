@@ -5,11 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
-    public static void ClickPlay() {
+    public static void ClickPlay()
+    {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
-    public static void ClickQuit() {
+    public static void ClickQuit()
+    {
         Application.Quit();
     }
 }

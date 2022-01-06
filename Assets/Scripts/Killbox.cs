@@ -7,11 +7,13 @@ public class Killbox : MonoBehaviour
     public float deathLevel;
     private Vector2 respawnPoint;
 
-    void Start() {
+    void Start()
+    {
         respawnPoint = GameObject.FindGameObjectWithTag("Respawn").transform.position;
     }
 
-    void Update() {
+    void Update()
+    {
         if (transform.position.y < deathLevel)
             transform.position = respawnPoint;
     }

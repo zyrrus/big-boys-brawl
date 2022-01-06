@@ -10,33 +10,40 @@ public class OneWayPlatform : MonoBehaviour
     private float lastDropTime;
     private GameObject currentPlatform;
     private CapsuleCollider2D playerCollider;
-    public float dropCoyoteTime; 
+    public float dropCoyoteTime;
 
-    private void Start() {
+    private void Start()
+    {
         playerCollider = GetComponent<CapsuleCollider2D>();
     }
 
-    private void Update() {
+    private void Update()
+    {
         // Update timers
         if (isPressingDrop) lastDropTime = dropCoyoteTime;
         else lastDropTime -= Time.deltaTime;
 
         // Perform drop
-        if (isColliding && lastDropTime > 0 && currentPlatform != null) {
+        if (isColliding && lastDropTime > 0 && currentPlatform != null)
+        {
             StartCoroutine(DisableCollision());
         }
     }
 
-    public void DropCallback(InputAction.CallbackContext context) {
-        switch(context.phase) {
-            case InputActionPhase.Started: {
-                OnDrop();
-                break;
-            }
-            case InputActionPhase.Canceled: {
-                OnDropEnd();
-                break;
-            }
+    public void DropCallback(InputAction.CallbackContext context)
+    {
+        switch (context.phase)
+        {
+            case InputActionPhase.Started:
+                {
+                    OnDrop();
+                    break;
+                }
+            case InputActionPhase.Canceled:
+                {
+                    OnDropEnd();
+                    break;
+                }
             default: break;
         }
     }
@@ -44,25 +51,30 @@ public class OneWayPlatform : MonoBehaviour
     private void OnDrop() { isPressingDrop = true; }
     private void OnDropEnd() { isPressingDrop = false; }
 
-    private void OnCollisionEnter2D(Collision2D collision) { 
-        if (collision.gameObject.CompareTag("Platform")) {
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Platform"))
+        {
             currentPlatform = collision.gameObject;
             isColliding = true;
-        } 
+        }
     }
 
-    private void OnCollisionExit2D(Collision2D collision) { 
-        if (collision.gameObject.CompareTag("Platform")) {
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Platform"))
+        {
             currentPlatform = null;
             isColliding = false;
-        } 
+        }
     }
 
-    IEnumerator DisableCollision() { 
+    IEnumerator DisableCollision()
+    {
         BoxCollider2D platformCollider = currentPlatform.GetComponent<BoxCollider2D>();
 
         Physics2D.IgnoreCollision(playerCollider, platformCollider);
-        yield return new WaitForSeconds(0.3f); 
+        yield return new WaitForSeconds(0.3f);
         Physics2D.IgnoreCollision(playerCollider, platformCollider, false);
     }
 }
