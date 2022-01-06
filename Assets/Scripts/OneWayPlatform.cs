@@ -7,25 +7,20 @@ public class OneWayPlatform : MonoBehaviour
 {
     private bool isColliding;
     private bool isPressingDrop;
-    private float originalArc = 125f;
     private float lastDropTime;
-    public float dropCoyoteTime; 
     private GameObject currentPlatform;
-    private PlatformEffector2D platformEffector;
+    private CapsuleCollider2D playerCollider;
+    public float dropCoyoteTime; 
+
+    private void Start() {
+        playerCollider = GetComponent<CapsuleCollider2D>();
+    }
 
     private void Update() {
         // Update timers
-        if (isPressingDrop) {
-            lastDropTime = dropCoyoteTime;
-        }
-        else {
-            lastDropTime -= Time.deltaTime;
-        }
+        if (isPressingDrop) lastDropTime = dropCoyoteTime;
+        else lastDropTime -= Time.deltaTime;
 
-        if (lastDropTime > 0)
-            Debug.LogFormat("{0}", lastDropTime);
-
-        // Debug.LogFormat("colliding: {0}, lastDropTime {1}, currentPlatform {2}", isColliding, lastDropTime, currentPlatform);
         // Perform drop
         if (isColliding && lastDropTime > 0 && currentPlatform != null) {
             StartCoroutine(DisableCollision());
@@ -64,9 +59,10 @@ public class OneWayPlatform : MonoBehaviour
     }
 
     IEnumerator DisableCollision() { 
-        platformEffector = currentPlatform.GetComponent<PlatformEffector2D>();
-        platformEffector.surfaceArc = 0;
+        BoxCollider2D platformCollider = currentPlatform.GetComponent<BoxCollider2D>();
+
+        Physics2D.IgnoreCollision(playerCollider, platformCollider);
         yield return new WaitForSeconds(0.3f); 
-        platformEffector.surfaceArc = originalArc;
+        Physics2D.IgnoreCollision(playerCollider, platformCollider, false);
     }
 }
