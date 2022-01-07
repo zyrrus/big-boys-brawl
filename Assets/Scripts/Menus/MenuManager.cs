@@ -23,7 +23,7 @@ public class MenuManager : MonoBehaviour
         es.SetSelectedGameObject(firstChild);
     }
 
-    public static void SetFullScreen() {}
+    public static void SetFullscreen() {}
     public static void SetResolution() {}
     public static void SetVolume() {}
 }
