@@ -7,13 +7,16 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 0
     path: 
-    guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
-    path: Assets/Scenes/LoadGlobal.unity
-    guid: d841b3586949a4c41ab716a30f79e0b7
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 6ccc9bcab04ee908c82bd9bfe2b9616e
+  - enabled: 1
+    path: Assets/Scenes/PlayGame.unity
+    guid: bd239a879419daaf68e9fbab029b8b9c
   - enabled: 1
     path: Assets/Scenes/TempArena.unity
     guid: fdb847fa1a5b4b46a858f61a0e522800
