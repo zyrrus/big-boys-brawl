@@ -9,21 +9,29 @@ public class PanelSelection : MonoBehaviour
     public Color ReadyColor; 
     public Color NotReadyColor; 
     
-    [SerializeField] private GameObject image; // Temporarily on Text object
-    [SerializeField] private TextMeshProUGUI textMesh;
-    [SerializeField] private GameObject readyObj; // Temporarily set on sprite
-    [SerializeField] private Image readyImage;
+    private static GameObject[] gmCharacters;
+
+    [SerializeField] private GameObject imageParent;
+    private TextMeshProUGUI textMesh;
+    [SerializeField] private GameObject readyParent;
+    private Image readyImage;
     
 
     private void Start()
     {
-        textMesh = image.GetComponent<TextMeshProUGUI>();
-        readyImage = readyObj.GetComponent<Image>();
+        gmCharacters = GameManager.Instance.allCharacters;
+        textMesh = imageParent.GetComponent<TextMeshProUGUI>();
+        readyImage = readyParent.GetComponent<Image>();
+        SetImage(0);
     }
 
-    public void SetImage(string value) 
+    public void SetImage(int index) 
     {
-        textMesh.text = value;
+        // Don't keep instantiating these
+        // GameObject newImage = Instantiate(gmCharacters[index], imageParent.transform.position, imageParent.transform.rotation);
+        // newImage.transform.SetParent(imageParent.transform);
+
+        textMesh.text = gmCharacters[index].name;
     }
 
     public void SetReady(bool state) 

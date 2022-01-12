@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Platform
   - SelectionParent
+  - RenderObject
   layers:
   - Default
   - TransparentFX

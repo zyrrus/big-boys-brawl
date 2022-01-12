@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Linq;
 
 public enum GameState { Select, Play, Pause, Outcome }
 
@@ -14,20 +15,16 @@ public class GameManager : Singleton<GameManager>
     public static GameState State;
     private PlayerInputManager pim;
 
-    public UnityEngine.Object[] allCharacters;
-    public UnityEngine.Object[] allMaps;
+    public GameObject[] allCharacters;
+    public GameObject[] allMaps;
     private List<GameObject> players;
     private int playerCount;
     private int readyCount;
 
     private void Start()
     {
-        allCharacters = Resources.LoadAll(CharactersPath, typeof(GameObject));
-        allMaps = Resources.LoadAll(MapsPath, typeof(GameObject));
-
-        // Debug.Log(allCharacters.Length);
-        // foreach (GameObject character in allCharacters)
-        //     Debug.Log(character);
+        allCharacters = Resources.LoadAll(CharactersPath, typeof(GameObject)).Cast<GameObject>().ToArray();
+        allMaps = Resources.LoadAll(MapsPath, typeof(GameObject)).Cast<GameObject>().ToArray();
 
         players = new List<GameObject>();
         pim = GetComponent<PlayerInputManager>();
@@ -62,11 +59,15 @@ public class GameManager : Singleton<GameManager>
 
     private void HandleSelect() {
         pim.EnableJoining();
-        
     }
 
     private void HandlePlay() {
         pim.DisableJoining();
+
+        // Start each player
+        foreach (GameObject player in players) 
+            player.GetComponent<PlayerManager>().OnGameStart();
+
         Debug.Log("PLAYING GAME");
     }
 

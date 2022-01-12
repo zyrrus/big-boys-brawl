@@ -9,6 +9,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private GameObject playerController;
     private PlayerMovement moveScript;
     private PlayerInput playerInput;
+    private GameObject UIParent;
 
     [SerializeField] private GameObject selectionCardPrefab;
     [SerializeField] private PanelSelection selectionScript;
@@ -26,7 +27,7 @@ public class PlayerManager : MonoBehaviour
         gm.PlayerJoined(gameObject);
 
         // Create new card
-        GameObject UIParent = GameObject.FindGameObjectWithTag("SelectionParent");
+        UIParent = GameObject.FindGameObjectWithTag("SelectionParent");
         GameObject newCard = Instantiate(selectionCardPrefab, Vector3.zero, Quaternion.identity);
         newCard.transform.SetParent(UIParent.transform);
 
@@ -45,6 +46,7 @@ public class PlayerManager : MonoBehaviour
 
         isReady = true; 
         selectionScript.SetReady(true);
+
         gm.OnPlayerReady();
     }
 
@@ -52,23 +54,38 @@ public class PlayerManager : MonoBehaviour
     {
         if (isReady || context.phase != InputActionPhase.Performed) return;
 
+        int charLength = GameManager.Instance.allCharacters.Length;
+
         selectionIndex += Mathf.RoundToInt(context.ReadValue<float>());
-        selectionScript.SetImage(selectionIndex + "");
+        if (selectionIndex < 0) selectionIndex += charLength; 
+        else selectionIndex %= charLength;
+
+        selectionScript.SetImage(selectionIndex);
     }
 
-    public void SetInputMethod(string method) 
-    {
-
-    }
 
     public void OnGameStart() 
     {
-        // Load sprite using selection index
-        // set input method to player
+        // Load character
+        GameObject selectedChar = Instantiate(gm.allCharacters[selectionIndex], playerController.transform.position, playerController.transform.rotation);
+        selectedChar.transform.SetParent(playerController.transform);
+
+        // Update controller
+        SetInputAction("Player");
+        SetCanMove(true);
+
+        // Disable UI
+        UIParent.transform.parent.transform.parent.gameObject.SetActive(false);
     }
 
-    private void setCanMove(bool value) 
+    // Change input action to player or selection
+    public void SetInputAction(string method) 
     {
+        playerInput.SwitchCurrentActionMap(method);
+    }
 
+    private void SetCanMove(bool value) 
+    {
+        moveScript.canMove = value;
     }
 }
