@@ -5,14 +5,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
 
-public enum GameState { Select, Play, Pause, Outcome }
+public enum GameState { none, Select, Play, Pause, Outcome }
 
 public class GameManager : Singleton<GameManager>
 {
     public static string CharactersPath = "Characters";
     public static string MapsPath = "Maps";
     public static event Action<GameState> OnStateChanged;
-    public static GameState State;
+    public static GameState State = GameState.none;
     private PlayerInputManager pim;
 
     public GameObject[] allCharacters;
@@ -58,6 +58,9 @@ public class GameManager : Singleton<GameManager>
     }
 
     private void HandleSelect() {
+        // Pick random map
+        SetMap(Mathf.RoundToInt(UnityEngine.Random.Range(0, allMaps.Length)));
+        Debug.Log("SELECTING");
         pim.EnableJoining();
     }
 
@@ -93,6 +96,11 @@ public class GameManager : Singleton<GameManager>
     {
         if (readyCount == playerCount) 
             UpdateState(GameState.Play);
+    }
+
+    private void SetMap(int index) 
+    {
+        Instantiate(allMaps[index], Vector3.zero, Quaternion.identity);
     }
 
 }

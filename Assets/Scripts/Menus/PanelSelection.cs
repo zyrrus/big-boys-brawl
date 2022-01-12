@@ -31,6 +31,7 @@ public class PanelSelection : MonoBehaviour
         // GameObject newImage = Instantiate(gmCharacters[index], imageParent.transform.position, imageParent.transform.rotation);
         // newImage.transform.SetParent(imageParent.transform);
 
+        // Temporarily showing character names
         textMesh.text = gmCharacters[index].name;
     }
 

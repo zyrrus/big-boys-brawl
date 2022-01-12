@@ -9,7 +9,11 @@ public class Killbox : MonoBehaviour
 
     void Start()
     {
-        respawnPoint = GameObject.FindGameObjectWithTag("Respawn").transform.position;
+        GameObject respawnPointGO = GameObject.FindGameObjectWithTag("Respawn");
+        if (respawnPointGO == null) 
+            respawnPoint = new Vector2(0, 1f);
+        else 
+            respawnPoint = respawnPointGO.transform.position;
     }
 
     void Update()
