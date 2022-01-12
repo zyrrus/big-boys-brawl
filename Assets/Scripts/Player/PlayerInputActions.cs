@@ -705,6 +705,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Ready"",
+                    ""type"": ""Button"",
+                    ""id"": ""37bd7a44-f648-47b4-b1ba-0cb1170282bc"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -806,6 +815,39 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""action"": ""Cycle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1a062cc2-d35c-4bc4-a1c9-3fcd5a9fde8c"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Ready"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2c2d2df7-b735-4faf-a4a6-559504905eff"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Ready"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c0f78ce1-c029-46c1-932e-f3826b37d3bd"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Ready"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -922,6 +964,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         // Selection
         m_Selection = asset.FindActionMap("Selection", throwIfNotFound: true);
         m_Selection_Cycle = m_Selection.FindAction("Cycle", throwIfNotFound: true);
+        m_Selection_Ready = m_Selection.FindAction("Ready", throwIfNotFound: true);
         // Join
         m_Join = asset.FindActionMap("Join", throwIfNotFound: true);
         m_Join_Join = m_Join.FindAction("Join", throwIfNotFound: true);
@@ -1147,11 +1190,13 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Selection;
     private ISelectionActions m_SelectionActionsCallbackInterface;
     private readonly InputAction m_Selection_Cycle;
+    private readonly InputAction m_Selection_Ready;
     public struct SelectionActions
     {
         private @PlayerInputActions m_Wrapper;
         public SelectionActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Cycle => m_Wrapper.m_Selection_Cycle;
+        public InputAction @Ready => m_Wrapper.m_Selection_Ready;
         public InputActionMap Get() { return m_Wrapper.m_Selection; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1164,6 +1209,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Cycle.started -= m_Wrapper.m_SelectionActionsCallbackInterface.OnCycle;
                 @Cycle.performed -= m_Wrapper.m_SelectionActionsCallbackInterface.OnCycle;
                 @Cycle.canceled -= m_Wrapper.m_SelectionActionsCallbackInterface.OnCycle;
+                @Ready.started -= m_Wrapper.m_SelectionActionsCallbackInterface.OnReady;
+                @Ready.performed -= m_Wrapper.m_SelectionActionsCallbackInterface.OnReady;
+                @Ready.canceled -= m_Wrapper.m_SelectionActionsCallbackInterface.OnReady;
             }
             m_Wrapper.m_SelectionActionsCallbackInterface = instance;
             if (instance != null)
@@ -1171,6 +1219,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Cycle.started += instance.OnCycle;
                 @Cycle.performed += instance.OnCycle;
                 @Cycle.canceled += instance.OnCycle;
+                @Ready.started += instance.OnReady;
+                @Ready.performed += instance.OnReady;
+                @Ready.canceled += instance.OnReady;
             }
         }
     }
@@ -1249,6 +1300,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     public interface ISelectionActions
     {
         void OnCycle(InputAction.CallbackContext context);
+        void OnReady(InputAction.CallbackContext context);
     }
     public interface IJoinActions
     {

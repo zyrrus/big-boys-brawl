@@ -45,7 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerController: {fileID: 0}
-  selectionCard: {fileID: 3872419123134910305, guid: e09417adf40529e4084b2fb845e9fda6, type: 3}
+  selectionCardPrefab: {fileID: 3872419123134910305, guid: e09417adf40529e4084b2fb845e9fda6, type: 3}
+  selectionScript: {fileID: 0}
   selectionIndex: 0
   isReady: 0
 --- !u!1001 &6253839134564552843
@@ -67,6 +68,10 @@ PrefabInstance:
       propertyPath: m_ActionEvents.Array.data[15].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -1132783380287622887, guid: 06c3e59ba5713ae11a45089157c550f6, type: 3}
+      propertyPath: m_ActionEvents.Array.data[14].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2716139462998029289}
     - target: {fileID: -1132783380287622887, guid: 06c3e59ba5713ae11a45089157c550f6, type: 3}
       propertyPath: m_ActionEvents.Array.data[15].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 1

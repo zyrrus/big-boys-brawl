@@ -9,7 +9,8 @@ public class PlayerManager : MonoBehaviour
     private PlayerMovement moveScript;
     private PlayerInput playerInput;
 
-    [SerializeField] private GameObject selectionCard;
+    [SerializeField] private GameObject selectionCardPrefab;
+    [SerializeField] private PanelSelection selectionScript;
     [SerializeField] private int selectionIndex;
     [SerializeField] private bool isReady;
 
@@ -24,8 +25,11 @@ public class PlayerManager : MonoBehaviour
 
         // Create new card
         GameObject UIParent = GameObject.FindGameObjectWithTag("SelectionParent");
-        GameObject newCard = Instantiate(selectionCard, Vector3.zero, Quaternion.identity);
+        GameObject newCard = Instantiate(selectionCardPrefab, Vector3.zero, Quaternion.identity);
         newCard.transform.SetParent(UIParent.transform);
+
+        // Get access to selection panel controller
+        selectionScript = newCard.GetComponent<PanelSelection>();
 
         // Get access to the player controller
         playerController = transform.GetChild(0).gameObject;
@@ -33,11 +37,21 @@ public class PlayerManager : MonoBehaviour
         playerInput = playerController.GetComponent<PlayerInput>();
     }
 
-    public void Ready() { isReady = true; }
+    public void Ready(InputAction.CallbackContext context) 
+    { 
+        if (context.phase != InputActionPhase.Performed) return;
+
+        isReady = true; 
+        selectionScript.SetReady(true);
+        // add 1 to GM ready
+    }
 
     public void SetSelection(InputAction.CallbackContext context) 
     {
+        if (isReady || context.phase != InputActionPhase.Performed) return;
+
         selectionIndex += Mathf.RoundToInt(context.ReadValue<float>());
+        selectionScript.SetImage(selectionIndex + "");
     }
 
     public void SetInputMethod(string method) 
