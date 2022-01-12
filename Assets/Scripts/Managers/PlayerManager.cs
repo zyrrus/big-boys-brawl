@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerManager : MonoBehaviour
 {
+    [SerializeField] private GameManager gm;
     [SerializeField] private GameObject playerController;
     private PlayerMovement moveScript;
     private PlayerInput playerInput;
@@ -21,7 +22,8 @@ public class PlayerManager : MonoBehaviour
         selectionIndex = 0;
 
         // Add self to GameManager
-        GameManager.Instance.PlayerJoined(gameObject);
+        gm = GameManager.Instance;
+        gm.PlayerJoined(gameObject);
 
         // Create new card
         GameObject UIParent = GameObject.FindGameObjectWithTag("SelectionParent");
@@ -43,7 +45,7 @@ public class PlayerManager : MonoBehaviour
 
         isReady = true; 
         selectionScript.SetReady(true);
-        // add 1 to GM ready
+        gm.OnPlayerReady();
     }
 
     public void SetSelection(InputAction.CallbackContext context) 
