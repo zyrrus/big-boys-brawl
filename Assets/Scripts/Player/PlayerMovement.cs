@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
     [Space(10)]
     private Vector2 moveInput;
     private Vector2 lastMoveInput;
-    public bool canMove = true;
+    public bool canMove = false;
 
     [Header("Jump")]
     public float jumpForce;

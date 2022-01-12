@@ -2,17 +2,28 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public enum GameState { MainMenu, SelectMap, SelectCharacter, PlayGame, Outcome }
+public enum GameState { Select, Play, Pause, Outcome }
 
-public class GameManager : PersistentSingleton<GameManager>
+public class GameManager : Singleton<GameManager>
 {
+    // PlayerInputManager
+    private List<GameObject> players = new List<GameObject>();
+    // PlayerInputManager.Enable/DisableJoining()
     public static event Action<GameState> OnStateChanged;
-    public GameState State;
+    public static GameState State;
+
+    public void PlayerJoined(GameObject player) 
+    {
+        players.Add(player);
+    }
+
+    public void PlayerLeft() {}
 
     private void Start()
     {
-        UpdateState(GameState.MainMenu);
+        UpdateState(GameState.Select);
     }
 
     public void UpdateState(GameState newState) 
@@ -22,17 +33,14 @@ public class GameManager : PersistentSingleton<GameManager>
         State = newState;
         switch (newState)
         {
-            case GameState.MainMenu:
-                HandleMainMenu();
+            case GameState.Select:
+                HandleSelect();
                 break;
-            case GameState.SelectMap:
-                HandleSelectMap();
+            case GameState.Play:
+                HandlePlay();
                 break;
-            case GameState.SelectCharacter:
-                HandleSelectCharacter();
-                break;
-            case GameState.PlayGame:
-                HandlePlayGame();
+            case GameState.Pause:
+                HandlePause();
                 break;
             case GameState.Outcome:
                 HandleOutcome();
@@ -42,32 +50,14 @@ public class GameManager : PersistentSingleton<GameManager>
 
         OnStateChanged?.Invoke(newState);
     }
-    
-    private void HandleMainMenu() { 
-        // On start:
-        // - Load menu scene
-        // 
+
+    private void HandleSelect() {
+        // playerinputmanager
     }
-    private void HandleSelectMap() { 
-        // On menu click 'Play':
-        // - Load map selection screen
-        // - Define Map, Players, and Characters
-        // - Swap to 'PlayGame' 
-    }
-    private void HandleSelectCharacter() { 
-        // On menu click 'Play':
-        // - Load selection screen
-        // - Define Map, Players, and Characters
-        // - Swap to 'PlayGame' 
-    }
-    private void HandlePlayGame() { 
-        // Disable Selection screens, enable arena 
-        // (maybe do this with scenes)
-        // Might need to map player inputs 
-        // to each selected character
-    }
-    private void HandleOutcome() { 
-        // Disable play
-        // Enable Outcome screen
-    }
+
+    private void HandlePlay() {}
+
+    private void HandlePause() {}
+
+    private void HandleOutcome() {}
 }
