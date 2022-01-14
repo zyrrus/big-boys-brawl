@@ -5,22 +5,25 @@ using UnityEngine.InputSystem;
 
 public class PlayerManager : MonoBehaviour
 {
-    [SerializeField] private GameManager gm;
-    [SerializeField] private GameObject playerController;
+    [SerializeField] public Vector2 DefaultSpawn;
+
+    private GameManager gm;
+    private GameObject playerController;
     private PlayerMovement moveScript;
     private PlayerInput playerInput;
     private GameObject UIParent;
 
     [SerializeField] private GameObject selectionCardPrefab;
-    [SerializeField] private PanelSelection selectionScript;
-    [SerializeField] private int selectionIndex;
-    [SerializeField] private bool isReady;
+    private PanelSelection selectionScript;
+    private int selectionIndex;
+    private bool isReady;
 
     private void Start()
     {
         // Reset variables
         isReady = false;
         selectionIndex = 0;
+        transform.position = DefaultSpawn;
 
         // Add self to GameManager
         gm = GameManager.Instance;
@@ -67,13 +70,15 @@ public class PlayerManager : MonoBehaviour
     public void OnGameStart() 
     {
         // Load character
-        GameObject selectedChar = Instantiate(gm.allCharacters[selectionIndex], playerController.transform.position, playerController.transform.rotation);
+        GameObject selectedChar = Instantiate(gm.allCharacters[selectionIndex], playerController.transform.position, Quaternion.identity);
         selectedChar.transform.SetParent(playerController.transform);
 
         // Update controller
         SetInputAction("Player");
         SetCanMove(true);
 
+        // Move to respawn point
+        moveScript.Respawn();
     }
 
     // Change input action to player or selection

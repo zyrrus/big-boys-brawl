@@ -62,8 +62,6 @@ public class GameManager : Singleton<GameManager>
 
     private void HandleSelect() 
     {
-        Debug.Log("SELECTING");
-
         pim.EnableJoining();
         
         // Pick random map
@@ -71,9 +69,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     private void HandlePlay() 
-    {
-        Debug.Log("PLAYING GAME");
-        
+    {        
         pim.DisableJoining();
 
         // Start each player

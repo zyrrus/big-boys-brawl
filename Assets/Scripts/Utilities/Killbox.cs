@@ -4,21 +4,19 @@ using UnityEngine;
 
 public class Killbox : MonoBehaviour
 {
-    public float deathLevel;
-    private Vector2 respawnPoint;
-
-    void Start()
+    private PlayerMovement pm;
+    [SerializeField] private float deathLevel; 
+    
+    private void Awake()
     {
-        GameObject respawnPointGO = GameObject.FindGameObjectWithTag("Respawn");
-        if (respawnPointGO == null) 
-            respawnPoint = new Vector2(0, 1f);
-        else 
-            respawnPoint = respawnPointGO.transform.position;
+        pm = GetComponent<PlayerMovement>();
     }
 
-    void Update()
+    private void Update()
     {
         if (transform.position.y < deathLevel)
-            transform.position = respawnPoint;
+        {
+            pm.Respawn();
+        }
     }
 }

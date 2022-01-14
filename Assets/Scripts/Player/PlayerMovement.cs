@@ -234,4 +234,8 @@ public class PlayerMovement : MonoBehaviour
         Gizmos.DrawWireCube(groundCheckPoint.position, groundCheckSize);
     }
 
+    public void Respawn() 
+    {
+        transform.position = transform.parent.transform.position;
+    }
 }
