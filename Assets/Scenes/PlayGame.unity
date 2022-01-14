@@ -655,6 +655,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 978ff16af8b4761409419864fd5284d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UISelectMenu: {fileID: 1571059149}
   allCharacters: []
   allMaps: []
 --- !u!114 &2095764840

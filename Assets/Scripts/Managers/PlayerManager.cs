@@ -74,8 +74,6 @@ public class PlayerManager : MonoBehaviour
         SetInputAction("Player");
         SetCanMove(true);
 
-        // Disable UI
-        UIParent.transform.parent.transform.parent.gameObject.SetActive(false);
     }
 
     // Change input action to player or selection

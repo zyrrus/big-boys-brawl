@@ -11,10 +11,13 @@ public class GameManager : Singleton<GameManager>
 {
     public static string CharactersPath = "Characters";
     public static string MapsPath = "Maps";
+
     public static event Action<GameState> OnStateChanged;
     public static GameState State = GameState.none;
-    private PlayerInputManager pim;
 
+    private PlayerInputManager pim;
+    [SerializeField] private GameObject UISelectMenu;
+    
     public GameObject[] allCharacters;
     public GameObject[] allMaps;
     private List<GameObject> players;
@@ -57,21 +60,28 @@ public class GameManager : Singleton<GameManager>
         OnStateChanged?.Invoke(newState);
     }
 
-    private void HandleSelect() {
+    private void HandleSelect() 
+    {
+        Debug.Log("SELECTING");
+
+        pim.EnableJoining();
+        
         // Pick random map
         SetMap(Mathf.RoundToInt(UnityEngine.Random.Range(0, allMaps.Length)));
-        Debug.Log("SELECTING");
-        pim.EnableJoining();
     }
 
-    private void HandlePlay() {
+    private void HandlePlay() 
+    {
+        Debug.Log("PLAYING GAME");
+        
         pim.DisableJoining();
 
         // Start each player
         foreach (GameObject player in players) 
             player.GetComponent<PlayerManager>().OnGameStart();
 
-        Debug.Log("PLAYING GAME");
+        // Disable UI
+        UISelectMenu.SetActive(false);
     }
 
     private void HandlePause() {}
